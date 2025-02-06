@@ -3,7 +3,7 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import db from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "@/data/user";
 import { RegisterSchema } from "@/schemas";
 
@@ -23,15 +23,13 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
-  await db.user.create({
+  await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
     },
   });
-
-
 
   return { success: "User created!" };
 };
